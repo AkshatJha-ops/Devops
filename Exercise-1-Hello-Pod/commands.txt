@@ -1,0 +1,10 @@
+﻿# Exercise 1: Hello Pod
+
+minikube start --driver=docker
+kubectl get nodes
+kubectl run hello-k8s --image=nginx --port=80
+kubectl get pods
+kubectl expose pod hello-k8s --type=NodePort --port=80
+kubectl get services
+kubectl get endpoints hello-k8s
+minikube service hello-k8s
