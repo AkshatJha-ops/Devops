@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Exercise 6: Delivery Monitoring'
+            }
+        }
+
+        stage('Validate Python') {
+            steps {
+                sh 'python --version'
+                sh 'python -m py_compile delivery_metrics.py'
+            }
+        }
+
+        stage('Validate Prometheus Config') {
+            steps {
+                sh 'test -f prometheus.yml'
+                sh 'test -f alert_rules.yml'
+            }
+        }
+    }
+}

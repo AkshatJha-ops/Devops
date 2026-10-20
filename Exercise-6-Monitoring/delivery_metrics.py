@@ -1,0 +1,33 @@
+
+from prometheus_client import start_http_server, Gauge, Summary
+import random
+import time
+
+total_deliveries = Gauge("total_deliveries", "Total deliveries")
+pending_deliveries = Gauge("pending_deliveries", "Pending deliveries")
+on_the_way_deliveries = Gauge("on_the_way_deliveries", "Deliveries on the way")
+average_delivery_time = Summary("average_delivery_time", "Delivery time in seconds")
+
+def simulate_delivery():
+    pending = random.randint(10, 20)
+    on_the_way = random.randint(5, 20)
+    delivered = random.randint(30, 70)
+    avg_time = random.uniform(15, 45)
+
+    total_deliveries.set(pending + on_the_way + delivered)
+    pending_deliveries.set(pending)
+    on_the_way_deliveries.set(on_the_way)
+    average_delivery_time.observe(avg_time)
+
+    print(f"Total deliveries: {pending + on_the_way + delivered}")
+    print(f"Pending deliveries: {pending}")
+    print(f"On the way: {on_the_way}")
+    print(f"Average delivery time: {avg_time:.2f} seconds")
+
+if __name__ == "__main__":
+    start_http_server(8000, addr="0.0.0.0")
+    print("Metrics server running at http://localhost:8000/metrics")
+
+    while True:
+        simulate_delivery()
+        time.sleep(1)

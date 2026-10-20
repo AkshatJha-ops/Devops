@@ -1,0 +1,11 @@
+groups:
+  - name: delivery_alerts
+    rules:
+      - alert: HighPendingDeliveries
+        expr: pending_deliveries > 15
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High pending deliveries"
+          description: "Pending deliveries have exceeded 15 for 30 seconds."
