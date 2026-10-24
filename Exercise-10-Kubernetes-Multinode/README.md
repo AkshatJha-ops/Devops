@@ -1,4 +1,4 @@
-﻿# Exercise 10: Multi-Node Kubernetes Cluster
+# Exercise 10: Multi-Node Kubernetes Cluster
 
 ## Objective
 Deploy two applications on a three-node Minikube Kubernetes cluster with replicas distributed across nodes.
@@ -27,12 +27,12 @@ Deploy two applications on a three-node Minikube Kubernetes cluster with replica
 - Windows 11 PowerShell
 
 ## Cluster
-Minikube profile: devops-multinode
+Minikube profile: minikube
 
 Nodes:
-- devops-multinode (control plane)
-- devops-multinode-m02 (worker)
-- devops-multinode-m03 (worker)
+- minikube (control plane)
+- minikube-m02 (worker)
+- minikube-m03 (worker)
 
 ## Deployment and Availability
 Both Deployments use required pod anti-affinity with topology key kubernetes.io/hostname.
@@ -57,3 +57,4 @@ The Shopping Cart stores items in application memory. Data is not shared between
 
 ## Evidence
 Screenshots of successful application tests are stored in the evidence/ directory.
+
