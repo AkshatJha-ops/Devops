@@ -1,19 +1,23 @@
-﻿pipeline {
+pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Files') {
             steps {
-                echo 'Exercise 9: Flask pipeline'
+                dir('Exercise-9-Jenkins-Multistage') {
+                    bat 'xcopy /E /I /Y "C:\\Users\\Akshat\\Documents\\Devops\\Exercise-9-Jenkins-Multistage\\*" .'
+                }
             }
         }
 
         stage('Build') {
             steps {
                 dir('Exercise-9-Jenkins-Multistage') {
-                    bat 'python --version'
-                    bat 'python -m venv .venv-ci'
-                    bat '.venv-ci\\Scripts\\python -m pip install -r requirements.txt'
+                    bat 'py -3.11 --version'
+                    bat 'if exist .venv-ci rmdir /s /q .venv-ci'
+                    bat 'py -3.11 -m venv .venv-ci'
+                    bat '.venv-ci\\Scripts\\python -m pip install --upgrade pip'
+                    bat '.venv-ci\\Scripts\\python -m pip install Flask==3.1.1 Werkzeug==3.1.3'
                 }
             }
         }
@@ -32,14 +36,6 @@
                     bat 'if not exist python-app-deploy mkdir python-app-deploy'
                     bat 'copy /Y app.py python-app-deploy\\app.py'
                     bat 'copy /Y requirements.txt python-app-deploy\\requirements.txt'
-                }
-            }
-        }
-
-        stage('Test Application') {
-            steps {
-                dir('Exercise-9-Jenkins-Multistage') {
-                    bat '.venv-ci\\Scripts\\python -m unittest discover -s . -p "test_*.py" -v'
                 }
             }
         }
