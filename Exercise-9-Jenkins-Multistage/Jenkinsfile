@@ -1,0 +1,56 @@
+﻿pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Exercise 9: Flask pipeline'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('Exercise-9-Jenkins-Multistage') {
+                    bat 'python --version'
+                    bat 'python -m venv .venv-ci'
+                    bat '.venv-ci\\Scripts\\python -m pip install -r requirements.txt'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('Exercise-9-Jenkins-Multistage') {
+                    bat '.venv-ci\\Scripts\\python -m unittest discover -s . -p "test_*.py" -v'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('Exercise-9-Jenkins-Multistage') {
+                    bat 'if not exist python-app-deploy mkdir python-app-deploy'
+                    bat 'copy /Y app.py python-app-deploy\\app.py'
+                    bat 'copy /Y requirements.txt python-app-deploy\\requirements.txt'
+                }
+            }
+        }
+
+        stage('Test Application') {
+            steps {
+                dir('Exercise-9-Jenkins-Multistage') {
+                    bat '.venv-ci\\Scripts\\python -m unittest discover -s . -p "test_*.py" -v'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Exercise 9 pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the stage logs.'
+        }
+    }
+}
